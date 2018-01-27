@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class PipelineJPanel extends JPanel {
+public class DatasetJPanel extends JPanel {
 
 	/**
 	 * Serial version
@@ -13,7 +13,7 @@ public class PipelineJPanel extends JPanel {
 	private static final long serialVersionUID = 5002279834197730624L;
 	BufferedImage _image;
 
-	public PipelineJPanel(BufferedImage _image) {
+	public DatasetJPanel(BufferedImage _image) {
 		super();
 		this._image = _image;
 		setSize(_image.getHeight(null), _image.getWidth(null));

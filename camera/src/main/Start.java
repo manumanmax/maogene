@@ -12,7 +12,7 @@ import face.ModuleFaceExtractor;
 import pipeline.Pipeline;
 import pipeline.PipelineExecutionException;
 import ui.PipelineJFrame;
-import ui.PipelineJPanel;
+import ui.DatasetJPanel;
 
 public class Start {
 	final static Logger _logger = LoggerFactory.getLogger(Start.class);
@@ -23,7 +23,7 @@ public class Start {
 		ModuleFaceExtractor mfe = new ModuleFaceExtractor(null);
 		ModuleCVCameraReader mCVdr = new ModuleCVCameraReader(mfe);// mfe
 
-		PipelineJPanel pipePanel = new PipelineJPanel(mCVdr.process(null));
+		DatasetJPanel pipePanel = new DatasetJPanel(mCVdr.process(null));
 		@SuppressWarnings("unused")
 		PipelineJFrame frame = new PipelineJFrame(pipePanel);
 		while (true) {
