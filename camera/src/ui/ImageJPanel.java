@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class DatasetJPanel extends JPanel {
+public class ImageJPanel extends JPanel implements ImageContainer {
 
 	/**
 	 * Serial version
@@ -13,12 +13,12 @@ public class DatasetJPanel extends JPanel {
 	private static final long serialVersionUID = 5002279834197730624L;
 
 	/** Image contained in the panel */
-	BufferedImage _image;
+	private static BufferedImage _image;
 
-	public DatasetJPanel(BufferedImage _image) {
+	public ImageJPanel(BufferedImage image) {
 		super();
-		this._image = _image;
-		setSize(_image.getHeight(null), _image.getWidth(null));
+		_image = image;
+		setSize(image.getHeight(null), image.getWidth(null));
 	}
 
 	@Override
@@ -30,5 +30,10 @@ public class DatasetJPanel extends JPanel {
 	public void replaceImage(BufferedImage image) {
 		_image = image;
 		paintComponent(this.getGraphics());
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		return _image;
 	}
 }
