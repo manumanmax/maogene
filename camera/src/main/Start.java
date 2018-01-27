@@ -11,7 +11,7 @@ import camera.ModuleCVCameraReader;
 import face.ModuleFaceExtractor;
 import pipeline.Pipeline;
 import pipeline.PipelineExecutionException;
-import ui.PipelineJFrame;
+import ui.DatasetJFrame;
 import ui.DatasetJPanel;
 
 public class Start {
@@ -25,7 +25,7 @@ public class Start {
 
 		DatasetJPanel pipePanel = new DatasetJPanel(mCVdr.process(null));
 		@SuppressWarnings("unused")
-		PipelineJFrame frame = new PipelineJFrame(pipePanel);
+		DatasetJFrame frame = new DatasetJFrame(pipePanel);
 		while (true) {
 			try {
 				Thread.sleep(100);

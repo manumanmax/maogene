@@ -11,6 +11,8 @@ public class DatasetJPanel extends JPanel {
 	 * Serial version
 	 */
 	private static final long serialVersionUID = 5002279834197730624L;
+
+	/** Image contained in the panel */
 	BufferedImage _image;
 
 	public DatasetJPanel(BufferedImage _image) {
