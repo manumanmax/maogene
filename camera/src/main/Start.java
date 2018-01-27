@@ -11,8 +11,8 @@ import camera.ModuleCVCameraReader;
 import face.ModuleFaceExtractor;
 import pipeline.Pipeline;
 import pipeline.PipelineExecutionException;
-import pipeline.PipelineJFrame;
-import pipeline.PipelineJPanel;
+import ui.PipelineJFrame;
+import ui.PipelineJPanel;
 
 public class Start {
 	final static Logger _logger = LoggerFactory.getLogger(Start.class);
