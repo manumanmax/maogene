@@ -26,17 +26,18 @@ public class ModuleCVCameraReader extends module.Module<BufferedImage> {
 		if (!_webcam.read(_frame)) {
 			throw new PipelineExecutionException(ExecutionStatus.restart, "Webcam image is still empty.");
 		}
-		// System.out.println("Write image to desktop");
-		// CVUtils.storeImage(_frame, "C:\\Users\\MANU\\Desktop\\", "output", ".png");
 		if (_successor != null) {
 			return (BufferedImage) _successor.process(_frame);
 		} else {
-			return CVUtils.matToBufferedImage(_frame);// new BufferedImage(_frame.width(), _frame.height(),
-			// BufferedImage.TYPE_BYTE_GRAY);
+			return CVUtils.matToBufferedImage(_frame);
 		}
 	}
 
 	public boolean isReady() {
 		return _webcam.isOpened();
+	}
+
+	public void closeCamera() {
+		_webcam.release();
 	}
 }

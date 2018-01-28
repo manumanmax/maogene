@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class ImageJPanel extends JPanel implements ImageContainer {
+public class ImageJPanel extends JPanel {
 
 	/**
 	 * Serial version
@@ -32,8 +32,4 @@ public class ImageJPanel extends JPanel implements ImageContainer {
 		paintComponent(this.getGraphics());
 	}
 
-	@Override
-	public BufferedImage getImage() {
-		return _image;
-	}
 }

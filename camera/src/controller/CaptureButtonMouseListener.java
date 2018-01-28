@@ -8,25 +8,23 @@ import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 
-import ui.ImageContainer;
+import ui.ImageSaver;
 import utils.MaoLogger;
 
 public class CaptureButtonMouseListener implements MouseListener {
 
-	private Path _folder;
-	private ImageContainer _imageContainer;
+	private static ImageSaver _container;
 
-	public CaptureButtonMouseListener(Path folder, ImageContainer container) {
-		_folder = folder;
-		_imageContainer = container;
+	public CaptureButtonMouseListener(Path folder, ImageSaver container) {
+		_container = container;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		String storagePath = _folder.toString() + "\\image.jpg";
+		String storagePath = _container.getFolder().toString() + "\\image.jpg";
 		File outputfile = new File(storagePath);
 		try {
-			ImageIO.write(_imageContainer.getImage(), "jpg", outputfile);
+			ImageIO.write(_container.getImage(), "jpg", outputfile);
 		} catch (IOException e) {
 			MaoLogger._logger.debug("Fail to store the image in " + storagePath);
 		}

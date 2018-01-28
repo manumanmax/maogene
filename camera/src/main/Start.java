@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutionException;
 
@@ -18,20 +20,38 @@ public class Start {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		// ModuleCameraReader mdr = new ModuleCameraReader(null);// mfe
 		ModuleFaceExtractor mfe = new ModuleFaceExtractor(null);
-		ModuleCVCameraReader mCVdr = new ModuleCVCameraReader(mfe);// mfe
+		ModuleCVCameraReader mCVcr = new ModuleCVCameraReader(mfe);// mfe
 
 		@SuppressWarnings("unused")
-		DatasetJFrame frame = new DatasetJFrame(mCVdr.process(null));
+		DatasetJFrame frame = new DatasetJFrame(mCVcr.process(null));
+		addAdvancedCloseListener(frame, mCVcr);
 		while (frame.isDisplayable()) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				MaoLogger._logger.debug("Interruption during sleep.");
 			}
-			Pipeline<BufferedImage> pipeline = new Pipeline<BufferedImage>(mCVdr);
+			Pipeline<BufferedImage> pipeline = new Pipeline<BufferedImage>(mCVcr);
 			pipeline.run();
+
 			frame.replaceImage(pipeline.getOutput());
 		}
+		mCVcr.closeCamera();
+	}
 
+	private static void addAdvancedCloseListener(DatasetJFrame frame, ModuleCVCameraReader mCVcr) {
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.out.println("\nClosing it.");
+				try {
+					mCVcr.closeCamera();
+				} catch (Exception e1) {
+					MaoLogger._logger.debug("Couldn't close the camera", e1);
+				}
+
+				System.exit(0);
+			}
+		});
 	}
 }
