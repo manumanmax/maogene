@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 
@@ -8,5 +9,7 @@ public interface ImageSaver {
 
 	public Path getFolder();
 
-	void setFolder(Path path);
+	public void setFolder(Path path);
+
+	public Component getComponent();
 }

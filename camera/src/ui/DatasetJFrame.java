@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
@@ -11,9 +12,6 @@ import javax.swing.JSplitPane;
 
 public class DatasetJFrame extends JFrame implements ImageSaver {
 
-	/**
-	 * 
-	 */
 	/** Image contained in the panel */
 	private static BufferedImage _image;
 	private static final long serialVersionUID = 3671831581716719941L;
@@ -25,8 +23,9 @@ public class DatasetJFrame extends JFrame implements ImageSaver {
 	public DatasetJFrame(BufferedImage image) {
 		super("Smile !");
 		_imagePanel = new ImageJPanel(image);
-		_navPanel = new NavigationJPanel(Paths.get("C:\\Users\\MANU\\Desktop"), this);
+		_navPanel = new NavigationJPanel(this);
 		_mainSplitPane = new JSplitPane();
+		_folder = Paths.get(System.getProperty("user.dir"));
 
 		configureAndDispose();
 	}
@@ -63,6 +62,11 @@ public class DatasetJFrame extends JFrame implements ImageSaver {
 	@Override
 	public Path getFolder() {
 		return _folder;
+	}
+
+	@Override
+	public Component getComponent() {
+		return this;
 	}
 
 }

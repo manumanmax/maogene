@@ -19,7 +19,7 @@ public class FolderSelectionActionListener implements ActionListener {
 		JFileChooser theFileChooser = (JFileChooser) actionEvent.getSource();
 		String command = actionEvent.getActionCommand();
 		if (command.equals(JFileChooser.APPROVE_SELECTION)) {
-			_folderContainer.setFolder(theFileChooser.getSelectedFile().toPath());
+			_folderContainer.setFolder(theFileChooser.getCurrentDirectory().toPath());
 		}
 	}
 

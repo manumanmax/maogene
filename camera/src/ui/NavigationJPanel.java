@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.Button;
-import java.nio.file.Path;
 
 import javax.swing.JFileChooser;
 import javax.swing.JSplitPane;
@@ -14,9 +13,9 @@ public class NavigationJPanel extends JSplitPane {
 	private static Button _captureButton = new Button("Capture");
 	private static JFileChooser _fileChooser = new JFileChooser();
 
-	public NavigationJPanel(Path folder, DatasetJFrame datasetJFrame) {
+	public NavigationJPanel(DatasetJFrame datasetJFrame) {
 		super();
-		_captureButton.addMouseListener(new CaptureButtonMouseListener(folder, datasetJFrame));
+		_captureButton.addMouseListener(new CaptureButtonMouseListener(datasetJFrame));
 		setOrientation(JSplitPane.VERTICAL_SPLIT);
 		setDividerLocation(100);
 		setLeftComponent(_captureButton);

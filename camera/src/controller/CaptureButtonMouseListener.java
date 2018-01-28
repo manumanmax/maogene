@@ -7,22 +7,39 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
+import enums.FileExt;
+import enums.FileUtils;
 import ui.ImageSaver;
+import utils.DataSetImageFilter;
 import utils.MaoLogger;
 
 public class CaptureButtonMouseListener implements MouseListener {
 
 	private static ImageSaver _container;
 
-	public CaptureButtonMouseListener(Path folder, ImageSaver container) {
+	public CaptureButtonMouseListener(ImageSaver container) {
 		_container = container;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		String storagePath = _container.getFolder().toString() + "\\image.jpg";
-		File outputfile = new File(storagePath);
+		// folder prepare
+		Path folderPath = _container.getFolder();
+		File folder = folderPath.toFile();
+		if (!folder.exists()) {
+			if (!folder.mkdir()) {
+				JOptionPane.showMessageDialog(_container.getComponent(),
+						"Coudn't create the folder " + folder.getPath());
+			}
+		}
+		// get next number
+		String[] files = folder.list(new DataSetImageFilter(folder.getName()));
+
+		StringBuilder storagePath = new StringBuilder().append(folderPath.toString()).append(FileUtils.FILE_SEPARATOR)
+				.append(folder.getName()).append(files.length).append(FileExt.JPG);
+		File outputfile = new File(storagePath.toString());
 		try {
 			ImageIO.write(_container.getImage(), "jpg", outputfile);
 		} catch (IOException e) {
