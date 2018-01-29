@@ -22,10 +22,10 @@ public class DatasetJFrame extends JFrame implements ImageSaver {
 
 	public DatasetJFrame(BufferedImage image) {
 		super("Smile !");
+		_folder = Paths.get(System.getProperty("user.dir"));
 		_imagePanel = new ImageJPanel(image);
 		_navPanel = new NavigationJPanel(this);
 		_mainSplitPane = new JSplitPane();
-		_folder = Paths.get(System.getProperty("user.dir"));
 
 		configureAndDispose();
 	}
