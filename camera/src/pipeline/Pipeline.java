@@ -22,7 +22,7 @@ public class Pipeline<O> implements Runnable {
 	@Override
 	public void run() {
 		try {
-			_output.complete(_input.process(null));
+			_output.complete(_input.process());
 		} catch (PipelineExecutionException e) {
 			_logger.debug(e._message, e);
 		}

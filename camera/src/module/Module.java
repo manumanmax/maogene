@@ -3,11 +3,11 @@ package module;
 import pipeline.PipelineExecutionException;
 
 public abstract class Module<O> {
-	protected Module<?> _successor;
+	protected Module<?> _predecessor;
 
-	public Module(Module<?> successor) {
-		_successor = successor;
+	public Module(Module<?> predecessor) {
+		_predecessor = predecessor;
 	}
 
-	public abstract <T> O process(T previousOutput) throws PipelineExecutionException;
+	public abstract O process() throws PipelineExecutionException;
 }

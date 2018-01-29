@@ -21,13 +21,13 @@ public class ModuleCameraReader extends module.Module<BufferedImage> {
 	}
 
 	@Override
-	public <T> BufferedImage process(T previousOutput) throws PipelineExecutionException {
+	public  BufferedImage process() throws PipelineExecutionException {
 		assert (_webcam != null);
 		if (_webcam.getImage() == null) {
 			throw new PipelineExecutionException(ExecutionStatus.restart, "Webcam image is still empty.");
 		}
-		if (_successor != null) {
-			return (BufferedImage) _successor.process(_webcam.getImage());
+		if (_predecessor != null) {
+			return (BufferedImage) _predecessor.process();
 		} else {
 			return _webcam.getImage();
 		}

@@ -2,41 +2,47 @@ package main;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutionException;
 
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
 import camera.ModuleCVCameraReader;
 import face.ModuleFaceExtractor;
+import image.ModuleCropImage;
 import pipeline.Pipeline;
 import pipeline.PipelineExecutionException;
 import ui.DatasetJFrame;
+import utils.CVUtils;
 import utils.MaoLogger;
 
 public class Start {
 
 	public static void main(String[] args) throws PipelineExecutionException, InterruptedException, ExecutionException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		// ModuleCameraReader mdr = new ModuleCameraReader(null);// mfe
-		ModuleFaceExtractor mfe = new ModuleFaceExtractor(null);
-		ModuleCVCameraReader mCVcr = new ModuleCVCameraReader(mfe);// mfe
+		ModuleCVCameraReader mCVcr = new ModuleCVCameraReader(null);
+		ModuleFaceExtractor mfe = new ModuleFaceExtractor(mCVcr);
+		ModuleCropImage mci = new ModuleCropImage(mfe, mCVcr);
 
-		@SuppressWarnings("unused")
-		DatasetJFrame frame = new DatasetJFrame(mCVcr.process(null));
+		DatasetJFrame frame = new DatasetJFrame(CVUtils.matToBufferedImage(mCVcr.process()));
 		addAdvancedCloseListener(frame, mCVcr);
+		processLoop(mci, frame);
+		mCVcr.closeCamera();
+	}
+
+	private static void processLoop(module.Module<Mat> module, DatasetJFrame frame)
+			throws InterruptedException, ExecutionException {
 		while (frame.isDisplayable()) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				MaoLogger._logger.debug("Interruption during sleep.");
 			}
-			Pipeline<BufferedImage> pipeline = new Pipeline<BufferedImage>(mCVcr);
+			Pipeline<Mat> pipeline = new Pipeline<Mat>(module);
 			pipeline.run();
 
-			frame.replaceImage(pipeline.getOutput());
+			frame.replaceImage(CVUtils.matToBufferedImage(pipeline.getOutput()));
 		}
-		mCVcr.closeCamera();
 	}
 
 	private static void addAdvancedCloseListener(DatasetJFrame frame, ModuleCVCameraReader mCVcr) {
