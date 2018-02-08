@@ -10,6 +10,7 @@ import org.opencv.core.Mat;
 import camera.ModuleCVCameraReader;
 import face.ModuleFaceExtractor;
 import image.ModuleCropImage;
+import image.ModuleHistogramEqualisation;
 import pipeline.Pipeline;
 import pipeline.PipelineExecutionException;
 import ui.DatasetJFrame;
@@ -21,8 +22,9 @@ public class Start {
 	public static void main(String[] args) throws PipelineExecutionException, InterruptedException, ExecutionException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModuleCVCameraReader mCVcr = new ModuleCVCameraReader(null);
-		ModuleFaceExtractor mfe = new ModuleFaceExtractor(mCVcr);
-		ModuleCropImage mci = new ModuleCropImage(mfe, mCVcr);
+		ModuleHistogramEqualisation mhe = new ModuleHistogramEqualisation(mCVcr);
+		ModuleFaceExtractor mfe = new ModuleFaceExtractor(mhe);
+		ModuleCropImage mci = new ModuleCropImage(mfe, mhe);
 
 		DatasetJFrame frame = new DatasetJFrame(CVUtils.matToBufferedImage(mCVcr.process()));
 		addAdvancedCloseListener(frame, mCVcr);

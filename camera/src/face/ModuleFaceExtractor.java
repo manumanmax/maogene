@@ -42,12 +42,6 @@ public class ModuleFaceExtractor extends Module<List<Rect>> {
 		}
 		MatOfRect faceDetections = new MatOfRect();
 		faceDetector.detectMultiScale(_image, faceDetections);
-		// if (_predecessor == null) {
-		// for (Rect rect : faceDetections.toArray()) {
-		// Imgproc.rectangle(_image, new Point(rect.x, rect.y),
-		// new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0));
-		// }
-		// }
 		return faceDetections.toList();
 	}
 
