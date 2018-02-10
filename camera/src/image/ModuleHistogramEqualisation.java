@@ -19,7 +19,6 @@ public class ModuleHistogramEqualisation extends Module<Mat> {
 		if ((image.type() == (((0) & ((1 << 3) - 1)) + (((1) - 1) << 3))))
 			Imgproc.equalizeHist(image, image);
 
-		Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB);
 		return image;
 	}
 
