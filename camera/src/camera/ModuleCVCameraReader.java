@@ -10,12 +10,13 @@ import utils.MaoLogger;
 
 public class ModuleCVCameraReader extends Module<Mat> {
 
-	private VideoCapture _webcam;
+	private static VideoCapture _webcam;
 	Mat _frame = new Mat();
 
 	public ModuleCVCameraReader(Module<Mat> successor) {
 		super(successor);
-		_webcam = new VideoCapture(0);
+		if (_webcam == null)
+			_webcam = new VideoCapture(0);
 	}
 
 	@Override
@@ -26,9 +27,9 @@ public class ModuleCVCameraReader extends Module<Mat> {
 				throw new PipelineExecutionException(ExecutionStatus.restart, "Webcam image is still empty.");
 			}
 			if (_predecessor != null) {
-				return (Mat) _predecessor.process();
+				return endProcess((Mat) _predecessor.process());
 			} else {
-				return _frame;
+				return endProcess(_frame);
 			}
 		} catch (Exception e) {
 			MaoLogger._logger.debug("Could'nt read the image from camera");

@@ -3,7 +3,10 @@ package utils;
 import java.awt.image.BufferedImage;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 public class CVUtils {
 	/**
@@ -50,5 +53,14 @@ public class CVUtils {
 	public static void storeImage(Mat img, String folder, String name, String extension) {
 		Imgcodecs.imwrite(folder + name + extension, img);
 
+	}
+
+	public static Mat rotate(Point center, Mat input, double radAngle) {
+		Mat output = new Mat();
+		int len = Math.max(input.cols(), input.rows());
+		Mat rotationMatrix = Imgproc.getRotationMatrix2D(center, Math.toDegrees(radAngle), 1.0);
+		Imgproc.warpAffine(input, output, rotationMatrix, new Size(len, len));
+
+		return output;
 	}
 }

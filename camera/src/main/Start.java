@@ -6,9 +6,12 @@ import java.util.concurrent.ExecutionException;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import camera.ModuleCVCameraReader;
-import pipeline.Pipeline;
+import face.ModuleFaceExtractor;
+import image.ModuleCropImage;
+import image.ModuleFaceAlignment;
 import pipeline.PipelineExecutionException;
 import ui.DatasetJFrame;
 import utils.CVUtils;
@@ -20,16 +23,16 @@ public class Start {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModuleCVCameraReader mCVcr = new ModuleCVCameraReader(null);
 		// ModuleHistogramEqualisation mhe = new ModuleHistogramEqualisation(mCVcr);
-		// ModuleFaceExtractor mfe = new ModuleFaceExtractor(mCVcr);
-		// ModuleCropImage mci = new ModuleCropImage(mfe, mCVcr);
-
+		ModuleFaceExtractor mfe = new ModuleFaceExtractor(mCVcr);
+		ModuleCropImage mci = new ModuleCropImage(mfe, mCVcr);
+		ModuleFaceAlignment mfa = new ModuleFaceAlignment(mci);
 		DatasetJFrame frame = new DatasetJFrame(CVUtils.matToBufferedImage(mCVcr.process()));
 		addAdvancedCloseListener(frame, mCVcr);
-		processLoop(mCVcr, frame);
+		processLoop(mCVcr, mfa, frame);
 		mCVcr.closeCamera();
 	}
 
-	private static void processLoop(module.Module<Mat> module, DatasetJFrame frame)
+	private static void processLoop(module.Module<Mat> module, ModuleFaceAlignment mfa, DatasetJFrame frame)
 			throws InterruptedException, ExecutionException {
 		while (frame.isDisplayable()) {
 			try {
@@ -37,10 +40,16 @@ public class Start {
 			} catch (InterruptedException e) {
 				MaoLogger._logger.debug("Interruption during sleep.");
 			}
-			Pipeline<Mat> pipeline = new Pipeline<Mat>(module);
-			pipeline.run();
 
-			frame.replaceImage(CVUtils.matToBufferedImage(pipeline.getOutput()));
+			double teta;
+			try {
+				teta = mfa.process();
+				Mat output = (Mat) mfa.initModule().getOutput();
+				output = CVUtils.rotate(new Point(output.cols() / 2, output.rows() / 2), output, teta);
+				frame.replaceImage(CVUtils.matToBufferedImage(output));
+			} catch (PipelineExecutionException e) {
+				MaoLogger._logger.debug("Loading...");
+			}
 		}
 	}
 

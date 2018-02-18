@@ -5,6 +5,7 @@ import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
+import enums.ExecutionStatus;
 import module.Module;
 import pipeline.PipelineExecutionException;
 
@@ -23,7 +24,7 @@ public class ModuleCropImage extends Module<Mat> {
 		@SuppressWarnings("unchecked")
 		List<Rect> rects = (List<Rect>) _predecessor.process();
 		if (rects.isEmpty()) {
-			return image;
+			throw new PipelineExecutionException(ExecutionStatus.no_face_found, "No face found when crop the image");
 		}
 		return new Mat(image, rects.get(0));
 	}
