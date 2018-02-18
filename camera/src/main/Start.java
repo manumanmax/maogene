@@ -8,9 +8,6 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import camera.ModuleCVCameraReader;
-import face.ModuleFaceExtractor;
-import image.ModuleCropImage;
-import image.ModuleHistogramEqualisation;
 import pipeline.Pipeline;
 import pipeline.PipelineExecutionException;
 import ui.DatasetJFrame;
@@ -22,13 +19,13 @@ public class Start {
 	public static void main(String[] args) throws PipelineExecutionException, InterruptedException, ExecutionException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModuleCVCameraReader mCVcr = new ModuleCVCameraReader(null);
-		ModuleHistogramEqualisation mhe = new ModuleHistogramEqualisation(mCVcr);
-		ModuleFaceExtractor mfe = new ModuleFaceExtractor(mhe);
-		ModuleCropImage mci = new ModuleCropImage(mfe, mhe);
+		// ModuleHistogramEqualisation mhe = new ModuleHistogramEqualisation(mCVcr);
+		// ModuleFaceExtractor mfe = new ModuleFaceExtractor(mCVcr);
+		// ModuleCropImage mci = new ModuleCropImage(mfe, mCVcr);
 
 		DatasetJFrame frame = new DatasetJFrame(CVUtils.matToBufferedImage(mCVcr.process()));
 		addAdvancedCloseListener(frame, mCVcr);
-		processLoop(mci, frame);
+		processLoop(mCVcr, frame);
 		mCVcr.closeCamera();
 	}
 
@@ -51,7 +48,7 @@ public class Start {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				System.out.println("\nClosing it.");
+				System.out.println("Closing camera.");
 				try {
 					mCVcr.closeCamera();
 				} catch (Exception e1) {

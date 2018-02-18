@@ -6,6 +6,7 @@ import org.opencv.videoio.VideoCapture;
 import enums.ExecutionStatus;
 import module.Module;
 import pipeline.PipelineExecutionException;
+import utils.MaoLogger;
 
 public class ModuleCVCameraReader extends Module<Mat> {
 
@@ -20,13 +21,18 @@ public class ModuleCVCameraReader extends Module<Mat> {
 	@Override
 	public Mat process() throws PipelineExecutionException {
 		assert (_webcam.isOpened());
-		if (!_webcam.read(_frame)) {
-			throw new PipelineExecutionException(ExecutionStatus.restart, "Webcam image is still empty.");
-		}
-		if (_predecessor != null) {
-			return (Mat) _predecessor.process();
-		} else {
-			return _frame;
+		try {
+			if (!_webcam.read(_frame)) {
+				throw new PipelineExecutionException(ExecutionStatus.restart, "Webcam image is still empty.");
+			}
+			if (_predecessor != null) {
+				return (Mat) _predecessor.process();
+			} else {
+				return _frame;
+			}
+		} catch (Exception e) {
+			MaoLogger._logger.debug("Could'nt read the image from camera");
+			return null;
 		}
 	}
 
