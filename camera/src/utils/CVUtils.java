@@ -63,4 +63,21 @@ public class CVUtils {
 
 		return output;
 	}
+
+	// source Adrian Rosebrock from pyimagesearch
+	public static Mat rotate_bounds(Point center, Mat input, double radAngle) {
+		Size inSize = input.size();
+		// int len = Math.max(input.cols(), input.rows());
+		Mat rotationMatrix = Imgproc.getRotationMatrix2D(center, -Math.toDegrees(radAngle), 1.0);
+		double cos = Math.abs(rotationMatrix.get(0, 0)[0]);
+		double sin = Math.abs(rotationMatrix.get(0, 1)[0]);
+		int nW = (int) ((inSize.height * sin) + (inSize.width * cos));
+		int nH = (int) ((inSize.height * cos) + (inSize.width * sin));
+		rotationMatrix.put(0, 2, rotationMatrix.get(0, 2)[0] + (nW / 2) - center.x);
+		rotationMatrix.put(1, 2, rotationMatrix.get(1, 2)[0] + (nH / 2) - center.y);
+		Mat output = new Mat(new Size(nW, nH), input.type());
+		Imgproc.warpAffine(input, output, rotationMatrix, new Size(nW, nH));
+
+		return output;
+	}
 }
