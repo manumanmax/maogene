@@ -9,14 +9,16 @@ import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import enums.FileExt;
 import enums.FileUtils;
 import ui.ImageSaver;
 import utils.DataSetImageFilter;
-import utils.MaoLogger;
 
 public class CaptureButtonMouseListener implements MouseListener {
-
+	public final static Logger _logger = LoggerFactory.getLogger(CaptureButtonMouseListener.class);
 	private static ImageSaver _container;
 
 	public CaptureButtonMouseListener(ImageSaver container) {
@@ -43,7 +45,7 @@ public class CaptureButtonMouseListener implements MouseListener {
 		try {
 			ImageIO.write(_container.getImage(), "jpg", outputfile);
 		} catch (IOException e) {
-			MaoLogger._logger.debug("Fail to store the image in " + storagePath);
+			_logger.debug("Fail to store the image in " + storagePath);
 		}
 	}
 

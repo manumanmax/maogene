@@ -68,7 +68,7 @@ public class CVUtils {
 	public static Mat rotate_bounds(Point center, Mat input, double radAngle) {
 		Size inSize = input.size();
 		// int len = Math.max(input.cols(), input.rows());
-		Mat rotationMatrix = Imgproc.getRotationMatrix2D(center, -Math.toDegrees(radAngle), 1.0);
+		Mat rotationMatrix = Imgproc.getRotationMatrix2D(center, Math.toDegrees(radAngle), 1.0);
 		double cos = Math.abs(rotationMatrix.get(0, 0)[0]);
 		double sin = Math.abs(rotationMatrix.get(0, 1)[0]);
 		int nW = (int) ((inSize.height * sin) + (inSize.width * cos));

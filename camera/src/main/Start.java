@@ -7,17 +7,20 @@ import java.util.concurrent.ExecutionException;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import camera.ModuleCVCameraReader;
+import enums.ExecutionStatus;
 import face.ModuleFaceExtractor;
 import image.ModuleCropImage;
 import image.ModuleFaceAlignment;
 import pipeline.PipelineExecutionException;
 import ui.DatasetJFrame;
 import utils.CVUtils;
-import utils.MaoLogger;
 
 public class Start {
+	public final static Logger _logger = LoggerFactory.getLogger(Start.class);
 
 	public static void main(String[] args) throws PipelineExecutionException, InterruptedException, ExecutionException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -38,17 +41,20 @@ public class Start {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				MaoLogger._logger.debug("Interruption during sleep.");
+				_logger.debug("Interruption during sleep.");
 			}
 
 			double teta;
 			try {
 				teta = mfa.process();
 				Mat output = (Mat) mfa.initModule().getOutput();
-				output = CVUtils.rotate(new Point(output.cols() / 2, output.rows() / 2), output, teta);
+				output = CVUtils.rotate_bounds(new Point(output.cols() / 2, output.rows() / 2), output, teta);
 				frame.replaceImage(CVUtils.matToBufferedImage(output));
 			} catch (PipelineExecutionException e) {
-				MaoLogger._logger.debug("Loading...");
+				_logger.debug("Loading...");
+				if (e._status != ExecutionStatus.stop) {
+					frame.replaceImage(CVUtils.matToBufferedImage((Mat) mfa.initModule().getOutput()));
+				}
 			}
 		}
 	}
@@ -61,7 +67,7 @@ public class Start {
 				try {
 					mCVcr.closeCamera();
 				} catch (Exception e1) {
-					MaoLogger._logger.debug("Couldn't close the camera", e1);
+					_logger.debug("Couldn't close the camera", e1);
 				}
 
 				System.exit(0);

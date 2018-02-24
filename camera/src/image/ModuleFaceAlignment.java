@@ -16,6 +16,7 @@ import ui.Imshow;
 
 public class ModuleFaceAlignment extends module.Module<Double> {
 	private final int MAX_EYES = 2;
+	private static final boolean DRAW = true;
 	Mat _image;
 	private static Imshow _display = new Imshow("croped image");
 
